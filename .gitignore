@@ -1,3 +1,5 @@
+*.png
+aspen-data/*
 flats_reduced/*
 darks_reduced/*
 biases_reduced/*

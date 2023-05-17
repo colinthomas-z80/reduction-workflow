@@ -45,14 +45,12 @@ def find_nearest_dark_exposure(image, dark_exposure_times, tolerance=0.5):
     return closest_dark_exposure
 
 
-bias_path = Path("biases_reduced")
 dark_path = Path("darks_reduced")
 flat_path = Path("flats_reduced")
 flat_path.mkdir(exist_ok=True)
 
 ifc_reduced = ccdp.ImageFileCollection(dark_path)
 combined_dark_files = {ccd.header["exptime"]: ccd for ccd in ifc_reduced.ccds(imagetyp="dark", combined=True)}
-
 actual_exposure_times = set(h['exptime'] for h in ifc_reduced.headers(imagetyp='dark', combined=True))
 
 flat_image_type = "FLATFIELD"
@@ -64,7 +62,7 @@ ifc_raw = ccdp.ImageFileCollection(raw_data)
 
 for ccd, file_name in ifc_raw.ccds(imagetyp="FLATFIELD", ccd_kwargs={"unit":"adu"}, return_fname=True):
 
-    ccd = ccdp.subtract_overscan(ccd, overscan=ccd[:, :2055], median=True)
+    ccd = ccdp.subtract_overscan(ccd, overscan=ccd[:, 2055:], median=True)
 
     ccd = ccdp.trim_image(ccd[:, :2048])
 
